@@ -26,18 +26,6 @@ class MatcherGroup
 
 end
 
-#class Matchers
-  #class Have
-    #def initialize(expected)
-      #@expected = expected
-    #end
-
-    #def matches?(collection)
-      #collection == expected
-    #end
-  #end
-#end
-
 class MatcherObject
   def initialize(subject, comparison=nil, &block)
     @subject = subject
@@ -51,5 +39,4 @@ class MatcherObject
 end
 
 class AssertionError < Exception
-
 end
