@@ -1,8 +1,8 @@
-module Kernel
-  def have(value)
-    Have.new(value)
-  end
-end
+#module Kernel
+  #def have(value)
+    #Have.new(value)
+  #end
+#end
 
 class Have
   attr_reader :value

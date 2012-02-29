@@ -6,5 +6,9 @@ module Matchers
   def equal?(value)
     Equal.new(value)
   end
+
+  def raise(value)
+    Raise.new(value)
+  end
 end
 
