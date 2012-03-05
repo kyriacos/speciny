@@ -11,21 +11,21 @@ describe "Have method" do
     5.should == subject.value
   end
 
-  it "should raise an error if the value the object are not equal" do
+  it "should raise MatchError if the value the object are not equal" do
     subject = have(5)
     thrown = nil
     begin
       6.should == subject.value
-    rescue Error => e
+    rescue Exception => e
       thrown = e
     ensure
-      unless !thrown.nil? && thrown.kind_of?(Error)
-        throw "Expected #{Error} instead got #{thrown}"
+      unless !thrown.nil? && thrown.kind_of?(Speciny::MatchError)
+        throw "Expected #{Speciny::MatchError} instead got #{thrown}"
       end
     end
   end
 
-  it "should respond to characters" do
+  it "should respond and have characters" do
     "test".should have(4).characters
   end
 end

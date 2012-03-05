@@ -11,13 +11,14 @@ class TestExpect
   end
 end
 
-describe "Expect method" do
+# Executes a method and returns the result without failing
+describe "Expect Method" do
   it "should execute the block and return the result" do
     expect { 1 + 1 }.should == 2
     expect { TestExpect.add_two(1, 3) }.should == 4
   end
 
-  it "should execute a block and return it" do
+  it "should return the exception and not fail" do
     expect { raise ArgumentError }.should raise_error(ArgumentError)
     expect { TestExpect.failing_method }.should raise_error("failed to work")
   end
