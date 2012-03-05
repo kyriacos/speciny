@@ -2,10 +2,17 @@ module Speciny
   class MatcherGroup
     include Matchers
 
+    attr_accessor :passing_tests,
+                  :failing_tests,
+                  :pending_tests
+
     def initialize(description, &block)
       @description = description
       @block = block
       @tests = {}
+      self.pending_tests = 0
+      self.failing_tests = 0
+      self.passing_tests = 0
     end
 
     def run!
@@ -18,35 +25,33 @@ module Speciny
       print_result(description, returned)
     end
 
+    def result?(returned)
+      returned.respond_to?(:result) ?  returned.result : returned
+    end
+
     def print_result(description, returned)
       result = result?(returned)
       puts "\t- #{description}"
       if result == true
         puts "\t\tPASSED"
+        self.passing_tests += 1
       elsif result == false
         puts "\t\tFAILED"
+        self.failing_tests += 1
       else
-        puts "-------PENDING"
+        puts "\t\tPENDING"
+        self.pending_tests += 1
       end
-    end
-
-    def result?(returned)
-      returned.respond_to?(:result) ?  returned.result : returned
     end
 
     def finish
-      puts "DESCRIBE: #{@description}"
-      passing_tests = 0
-      failing_tests = 0
-      total_tests = 0
-      # add pending
-      @tests.each do |description, returned|
-        result?(returned) ? passing_tests +=1 : failing_tests += 1
-        total_tests +=1
-      end
-      puts "PASSING: #{passing_tests}"
-      puts "FAILING: #{failing_tests}"
-      puts "TOTAL TESTS: #{total_tests}"
+      puts "-------------------------------"
+      puts "DESCRIBE:\t #{@description}"
+      puts "PASSING:\t #{passing_tests}"
+      puts "FAILING:\t #{failing_tests}"
+      puts "PENDING:\t #{pending_tests}"
+      puts "-------------------------------"
+      puts "TOTAL TESTS: #{@tests.count}"
     end
   end
 
