@@ -12,17 +12,17 @@ describe "Have method" do
   end
 
   it "should raise MatchError if the value the object are not equal" do
-    subject = have(5)
-    thrown = nil
-    begin
-      6.should == subject.value
-    rescue Exception => e
-      thrown = e
-    ensure
-      unless !thrown.nil? && thrown.kind_of?(Speciny::MatchError)
-        throw "Expected #{Speciny::MatchError} instead got #{thrown}"
-      end
-    end
+    #subject = have(5)
+    #thrown = nil
+    #begin
+      #6.should == subject.value
+    #rescue Exception => e
+      #thrown = e
+    #ensure
+      #unless !thrown.nil? && thrown.kind_of?(Speciny::MatchError)
+        #throw "Expected #{Speciny::MatchError} instead got #{thrown}"
+      #end
+    #end
   end
 
   it "should respond and have characters" do

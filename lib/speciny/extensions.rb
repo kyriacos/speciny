@@ -7,7 +7,7 @@ end
 module Kernel
   private
   def describe(description, &block)
-    Speciny::MatcherGroup.new(block).run!
+    Speciny::MatcherGroup.new(description, &block).run!
   end
 end
 
