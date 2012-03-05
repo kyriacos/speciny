@@ -10,21 +10,43 @@ module Speciny
 
     def run!
       instance_eval &@block
-      @tests.each do |description, returned|
-        returned = returned.result if returned.respond_to?(:result)
-        puts description
-        if returned == true
-          puts "\tPASSED"
-        elsif returned == false
-          puts "\tFAILED"
-        else
-          puts "\t--PENDING"
-        end
-      end
+      finish
     end
 
     def it(description, &block)
-      @tests[description] = block.call
+      @tests[description] = returned = block.call
+      print_result(description, returned)
+    end
+
+    def print_result(description, returned)
+      result = result?(returned)
+      puts "\t- #{description}"
+      if result == true
+        puts "\t\tPASSED"
+      elsif result == false
+        puts "\t\tFAILED"
+      else
+        puts "-------PENDING"
+      end
+    end
+
+    def result?(returned)
+      returned.respond_to?(:result) ?  returned.result : returned
+    end
+
+    def finish
+      puts "DESCRIBE: #{@description}"
+      passing_tests = 0
+      failing_tests = 0
+      total_tests = 0
+      # add pending
+      @tests.each do |description, returned|
+        result?(returned) ? passing_tests +=1 : failing_tests += 1
+        total_tests +=1
+      end
+      puts "PASSING: #{passing_tests}"
+      puts "FAILING: #{failing_tests}"
+      puts "TOTAL TESTS: #{total_tests}"
     end
   end
 
