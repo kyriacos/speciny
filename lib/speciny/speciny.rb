@@ -15,17 +15,21 @@ module Speciny
       self.passing_tests = 0
     end
 
+    # Executes block inside the MatcherGroup
+    # and prints the result on screen
     def run!
       puts "DESCRIBE: #{@description}"
       instance_eval &@block
       finish
     end
 
+    # Normal examples
     def it(description, &block)
       @tests[description] = returned = block.call
       print_result(description, returned)
     end
 
+    # Pending examples
     def xit(description, &block)
       @tests[description] = "pending"
       print_result(description, "pending")

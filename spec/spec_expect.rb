@@ -22,4 +22,9 @@ describe "Expect Method" do
     expect { raise ArgumentError }.should raise_error(ArgumentError)
     expect { TestExpect.failing_method }.should raise_error("failed to work")
   end
+
+  it "should work with block aliases" do
+    expect { 1 + 1 }.to == 2
+    expect { raise StandardError }.to raise_error StandardError
+  end
 end
