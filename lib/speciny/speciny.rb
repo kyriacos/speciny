@@ -31,7 +31,7 @@ module Speciny
 
     # Pending examples
     def xit(description, &block)
-      @tests[description] = "pending"
+      @tests[description] = block
       print_result(description, "pending")
     end
 
@@ -64,28 +64,23 @@ module Speciny
       puts "TOTAL TESTS: #{@tests.count}"
     end
   end
+end
 
-
+module Speciny
   class MatcherObject
-    attr_reader :subject, :comparison, :result
-    def initialize(subject, comparison=nil, &block)
-      @subject = subject
-      @comparison = comparison
-      @result = self.matches? if !comparison.nil?
+    attr_reader :actual, :expected, :result
+    def initialize(actual, expected=nil, &block)
+      @actual = actual
+      @expected = expected
+      @result = self.matches? if !expected.nil?
     end
 
     def ==(other)
-      #raise Speciny::MatchError unless @subject == other
-      @result = @subject == other
+      @result = @actual == other
     end
 
     def matches?
-      #raise Speciny::MatchError unless @comparison.matches?(@subject)
-      @comparison.matches?(@subject)
+      @expected.matches?(@actual)
     end
-  end
-
-
-  class MatchError < Exception
   end
 end

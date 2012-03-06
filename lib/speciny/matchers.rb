@@ -43,12 +43,12 @@ module Speciny
       def things; self; end
       def characters; self; end
 
-      def matches?(object)
-        return object == self.value if object.kind_of?(Numeric)
-        return object.length == self.value
-        if object.respond_to?(:length)
+      def matches?(actual)
+        return actual == self.value if actual.kind_of?(Numeric)
+        if actual.respond_to?(:length)
+          actual.length == self.value
         else
-          object == self.value
+          actual == self.value
         end
       end
     end
@@ -59,8 +59,8 @@ module Speciny
         @value = value
       end
 
-      def matches?(object)
-        object.equal?(self.value)
+      def matches?(actual)
+        actual.equal?(self.value)
       end
     end
 
@@ -70,12 +70,12 @@ module Speciny
         @value = value
       end
 
-      def matches?(object)
-        if self.value.kind_of?(String) && object.respond_to?(:message)
-          self.value == object.message
+      def matches?(actual)
+        if self.value.kind_of?(String) && actual.respond_to?(:message)
+          self.value == actual.message
         else
           # if they have the same exception class
-          self.value == object.class
+          self.value == actual.class
         end
       end
     end
