@@ -2,6 +2,7 @@ module Kernel
   def should(matcher=nil, &block)
     Speciny::MatcherObject.new(self, matcher, &block)
   end
+  alias :to :should
 end
 
 module Kernel

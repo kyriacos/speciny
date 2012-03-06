@@ -26,6 +26,11 @@ module Speciny
       print_result(description, returned)
     end
 
+    def xit(description, &block)
+      @tests[description] = "pending"
+      print_result(description, "pending")
+    end
+
     def result?(returned)
       returned.respond_to?(:result) ?  returned.result : returned
     end
@@ -39,7 +44,7 @@ module Speciny
       elsif result == false
         puts "\t\tFAILED"
         self.failing_tests += 1
-      else
+      elsif result == "pending"
         puts "\t\tPENDING"
         self.pending_tests += 1
       end
