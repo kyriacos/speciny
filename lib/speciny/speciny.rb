@@ -16,6 +16,7 @@ module Speciny
     end
 
     def run!
+      puts "DESCRIBE: #{@description}"
       instance_eval &@block
       finish
     end
