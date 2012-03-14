@@ -30,10 +30,27 @@ module Speciny
     end
 
     def let(name, &block)
-      self.class.send :define_method, name do
+      # eigenclass = class << self; self; end
+      # eigenclass or singleton_class ->
+      # singleton_class introduced in ruby 1.9
+      # needs to be defined on the singleton class
+      # re-read the singleton class stuff
+      # also last chapter on adding attr_checked
+      # http://stackoverflow.com/questions/7392586/add-ruby-class-methods-or-instance-methods-dynamically
+      singleton_class.send :define_method, name do
         @assignments ||= {}
         @assignments[name] = instance_eval &block
       end
+      # the method i used before
+      # defines on class not on instance
+      # as such variables persisted across all describe
+      # examples
+      # self.class.instance_eval do ... end
+      # self.class.class_eval do .. end
+      #self.class.send :define_method, name do
+        #@assignments ||= {}
+        #@assignments[name] = instance_eval &block
+      #end
     end
 
     # refactor this to use each and all

@@ -8,13 +8,22 @@ require 'lib/speciny'
 $count = 0
 describe "let" do
 
-  let(:count) { $count += 1 }
+  context "let it exist" do
+    let(:count) { $count += 1 }
 
-  it "memoized the value" do
-    count.should == 1
+    it "memoized the value" do
+      count.should == 1
+    end
+
+    it "is not cached across examples" do
+      count.should == 2
+    end
   end
 
-  it "is not cached across examples" do
-    count.should == 2
+  context "let it not exist any more" do
+    it "does not exist in this example" do
+      expect {count}.to raise_error NameError
+    end
   end
 end
+
