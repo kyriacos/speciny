@@ -4,7 +4,7 @@ module Speciny
       Have.new(value)
     end
 
-    def equal?(value)
+    def equal(value)
       Equal.new(value)
     end
 
@@ -12,22 +12,22 @@ module Speciny
       Raise.new(value)
     end
     alias :raises_error :raise_error
-      alias :fails_with :raise_error
-      alias :fail_with :raise_error
-      alias :fail_with_message :raise_error
-      alias :raise_exception :raise_error
+    alias :fails_with :raise_error
+    alias :fail_with :raise_error
+    alias :fail_with_message :raise_error
+    alias :raise_exception :raise_error
 
-      def expect(&block)
-        result = nil
-        begin
-          result = block.call
-        rescue Exception => e
-          result = e
-        ensure
-          result
-        end
+    def expect(&block)
+      result = nil
+      begin
+        result = block.call
+      rescue Exception => e
+        result = e
+      ensure
         result
       end
+      result
+    end
   end
 end
 
