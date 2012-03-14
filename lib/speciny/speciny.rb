@@ -37,6 +37,11 @@ module Speciny
     # one way woul be to load all setup blocks
     # as before_filters work in rails and execute them
     # in the right order
+    # its somewhere in the patterns book
+    # child.before -> parent.before -> parent.before
+    # its a chain to be executed.
+    # If there is a before each that is
+    #
     def before(order=nil, &block)
       block.call
     end
