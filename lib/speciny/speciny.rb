@@ -18,14 +18,25 @@ module Speciny
     # Executes block inside the MatcherGroup
     # and prints the result on screen
     def run!
+      #ia = self.instance_variables
       puts "DESCRIBE: #{@description}"
       instance_eval &@block
+      #ia = self.instance_variables - ia
+      #ia.each { |i| i.remove }
       finish
+    end
+
+    def before(&block)
+      block.call
     end
 
     # Normal examples
     def it(description, &block)
-      @tests[description] = returned = block.call
+      #returned = Speciny::ExampleGroup.new(self, description, &block).run!
+      returned = proc do
+        block.call
+      end.call
+      @tests[description] = returned
       print_result(description, returned)
     end
 
@@ -84,3 +95,21 @@ module Speciny
     end
   end
 end
+
+
+#module Speciny
+  #class ExampleGroup
+    #def initialize(describe_class, description, &block)
+      #@describe_class = describe_class
+      #@description = description
+      #@block = block
+    #end
+
+    #def run!
+      #@describe_class.class.class_eval do
+        #@block.call
+      #end
+    #end
+
+  #end
+#end
