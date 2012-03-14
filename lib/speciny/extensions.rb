@@ -10,5 +10,6 @@ module Kernel
   def describe(description, &block)
     Speciny::MatcherGroup.new(description, &block).run!
   end
+  alias :context :describe
 end
 

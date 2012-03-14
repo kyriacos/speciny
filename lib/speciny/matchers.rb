@@ -8,7 +8,7 @@ module Speciny
       Equal.new(value)
     end
 
-    def raise_error(value)
+    def raise_error(value=nil)
       Raise.new(value)
     end
     alias :raises_error :raise_error
@@ -66,13 +66,16 @@ module Speciny
 
     class Raise
       attr_reader :value
-      def initialize(value)
+      def initialize(value=nil)
         @value = value
       end
 
       def matches?(actual)
         if self.value.kind_of?(String) && actual.respond_to?(:message)
           self.value == actual.message
+        elsif actual.respond_to?(:message) && self.value.nil?
+          # an exception was still raised
+          true
         else
           # if they have the same exception class
           self.value == actual.class
