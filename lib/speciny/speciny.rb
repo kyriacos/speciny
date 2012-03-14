@@ -26,13 +26,23 @@ module Speciny
       finish
     end
 
-    def before(&block)
+    def let(name, &block)
+      self.class.send :define_method, name do
+        @assignments ||= {}
+        @assignments[name] = instance_eval &block
+      end
+    end
+
+    # refactor this to use each and all
+    # one way woul be to load all setup blocks
+    # as before_filters work in rails and execute them
+    # in the right order
+    def before(order=nil, &block)
       block.call
     end
 
     # Normal examples
     def it(description, &block)
-      #returned = Speciny::ExampleGroup.new(self, description, &block).run!
       returned = proc do
         block.call
       end.call
