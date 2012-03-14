@@ -12,7 +12,7 @@ describe "Before block" do
     @somestring.should == "somestring"
   end
 
-  context "Variables set in one example not available in other example" do
+  scenario "Variables set in one example not available in other example" do
     before do
       @somevar = 12
     end
@@ -21,14 +21,34 @@ describe "Before block" do
       @somevar.should == 12
     end
 
-    it "variable in top context should be nil" do
-      @somestring.should == nil
+    it "should have access to parent before variables" do
+      @somestring.should == "somestring"
     end
   end
 
-  context "Each context can have its own variables" do
-    it "should not have variables from previous context" do
-      @somevar.should == nil
+  scenario "Each context has its local instance variables" do
+    context "first context" do
+      before(:each) do
+        @first = 100
+      end
+
+      it "should have @first" do
+        @first.should == 100
+      end
+    end
+
+    context "second context" do
+      before(:each) do
+        @second = 200
+      end
+
+      it "should have @second" do
+        @second.should == 200
+      end
+
+      it "should not have @first" do
+        @first.should == nil
+      end
     end
   end
 end
@@ -43,9 +63,8 @@ describe "before each" do
     @person = Person.new
   end
 
-  #context "initialized in before(:each)" do
+  context "initialized in before(:each)" do
     it "has the default NoName" do
-      p @person
       @person.name.should == "NoName"
     end
 
@@ -57,5 +76,5 @@ describe "before each" do
     it "should not share state with other examples" do
       @person.name.should == "NoName"
     end
-  #end
+  end
 end

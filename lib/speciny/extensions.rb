@@ -11,5 +11,6 @@ module Kernel
     Speciny::MatcherGroup.new(description, &block).run!
   end
   alias :context :describe
+  alias :scenario :describe
 end
 

@@ -10,6 +10,9 @@ module Speciny
       @description = description
       @block = block
       @tests = {}
+      @before_each = {}
+      # maybe change to instance variables to
+      # calc the sum for total as well
       self.pending_tests = 0
       self.failing_tests = 0
       self.passing_tests = 0
@@ -42,13 +45,28 @@ module Speciny
     # its a chain to be executed.
     # If there is a before each that is
     #
-    def before(order=nil, &block)
-      block.call
+    # describe needs to take in a parent class
+    def before(order=:each, &block)
+      @before_each[order] = block if order == :each
     end
+
+    # here i defined the context and aliased the describe
+    # method so that any describe or context blocks nested
+    # within context/describe are evaluated under it and
+    # any before blocks are added and executed
+    def context(description, &block)
+      context = Speciny::MatcherGroup.new(description, &block)
+      # note to self basically add all the before stuff from the previous instance
+      @before_each.each { |order, bck| context.before(order, &bck) }
+      context.run!
+    end
+    alias :describe :context
+    alias :scenario :context
 
     # Normal examples
     def it(description, &block)
       returned = proc do
+        @before_each.each { |_, b| instance_eval &b }
         block.call
       end.call
       @tests[description] = returned
