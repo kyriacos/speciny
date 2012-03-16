@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift "./lib"
+
+files = ARGV
+
+if files.empty?
+  files = Dir["spec/**/*_spec.rb"]
+end
+
+require 'speciny'
+
+
+results = {}
+
+files.each do |file|
+  puts "Running: #{file}"
+  system("ruby -I. #{file}")
+end

@@ -1,16 +1,10 @@
 module Speciny
   module Matchers
-    def have(value)
-      Have.new(value)
-    end
 
-    def equal(value)
-      Equal.new(value)
-    end
+    def have(value); Have.new(value); end
+    def equal(value); Equal.new(value); end
 
-    def raise_error(value=nil)
-      Raise.new(value)
-    end
+    def raise_error(value=nil); Raise.new(value); end
     alias :raises_error :raise_error
     alias :fails_with :raise_error
     alias :fail_with :raise_error
@@ -28,15 +22,11 @@ module Speciny
       end
       result
     end
-  end
-end
 
-module Speciny
-  module Matchers
     class Have
       attr_reader :value
       def initialize(value)
-        @value = value
+        self.value = value
       end
 
       def items; self; end
@@ -56,7 +46,7 @@ module Speciny
     class Equal
       attr_reader :value
       def initialize(value)
-        @value = value
+        self.value = value
       end
 
       def matches?(actual)
@@ -67,7 +57,7 @@ module Speciny
     class Raise
       attr_reader :value
       def initialize(value=nil)
-        @value = value
+        self.value = value
       end
 
       def matches?(actual)
