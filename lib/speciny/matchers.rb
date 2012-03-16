@@ -26,7 +26,7 @@ module Speciny
     class Have
       attr_reader :value
       def initialize(value)
-        self.value = value
+        @value = value
       end
 
       def items; self; end
@@ -34,11 +34,11 @@ module Speciny
       def characters; self; end
 
       def matches?(actual)
-        return actual == self.value if actual.kind_of?(Numeric)
+        return actual == value if actual.kind_of?(Numeric)
         if actual.respond_to?(:length)
-          actual.length == self.value
+          actual.length == value
         else
-          actual == self.value
+          actual == value
         end
       end
     end
@@ -46,29 +46,29 @@ module Speciny
     class Equal
       attr_reader :value
       def initialize(value)
-        self.value = value
+        @value = value
       end
 
       def matches?(actual)
-        actual.equal?(self.value)
+        actual.equal?(value)
       end
     end
 
     class Raise
       attr_reader :value
       def initialize(value=nil)
-        self.value = value
+        @value = value
       end
 
       def matches?(actual)
-        if self.value.kind_of?(String) && actual.respond_to?(:message)
-          self.value == actual.message
-        elsif actual.respond_to?(:message) && self.value.nil?
+        if value.kind_of?(String) && actual.respond_to?(:message)
+          value == actual.message
+        elsif actual.respond_to?(:message) && value.nil?
           # an exception was still raised
           true
         else
           # if they have the same exception class
-          self.value == actual.class
+          value == actual.class
         end
       end
     end

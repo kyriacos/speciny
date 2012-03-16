@@ -14,12 +14,9 @@ module Speciny
     # the screen with the results.
     def summary_at_exit
       reporter = Speciny::Reporter.new(@description)
-      at_exit {
-        @tests.each do |example, result|
-          reporter.print_test_result(example, result)
-        end
-        #reporter.print_summary
-      }
+      @tests.each do |example, result|
+        reporter.print_test_result(example, result)
+      end
     end
 
     # Executes block inside the MatcherGroup
@@ -162,7 +159,7 @@ module Speciny
     # Just the simplest way i could do this i the time.
     # Couldn't think of a better way. Please contribute if you have one.
     def xit(description, &block)
-      @tests[description] = :PENDING
+      @tests[description] = :pending
     end
   end
 end
