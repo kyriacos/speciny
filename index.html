@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>matcher_group.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>matcher_group.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">module</span> <span class="nn">Speciny</span>
+  <span class="k">class</span> <span class="nc">MatcherGroup</span>
+    <span class="kp">include</span> <span class="no">Matchers</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="vi">@description</span> <span class="o">=</span> <span class="n">description</span>
+      <span class="vi">@block</span> <span class="o">=</span> <span class="n">block</span>
+      <span class="vi">@tests</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="vi">@before</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">order</span><span class="p">,</span> <span class="n">values</span><span class="o">|</span> <span class="n">order</span><span class="o">[</span><span class="n">values</span><span class="o">]</span> <span class="o">=</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>When the instance exits it should print a summary on
+the screen with the results.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">summary_at_exit</span>
+      <span class="n">reporter</span> <span class="o">=</span> <span class="no">Speciny</span><span class="o">::</span><span class="no">Reporter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@description</span><span class="p">)</span>
+      <span class="vi">@tests</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">example</span><span class="p">,</span> <span class="n">result</span><span class="o">|</span>
+        <span class="n">reporter</span><span class="o">.</span><span class="n">print_test_result</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Executes block inside the MatcherGroup
+and prints the result on screen</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">run!</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Have to evalute/execute the block on the instance</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nb">instance_eval</span> <span class="o">&amp;</span><span class="vi">@block</span>
+      <span class="n">summary_at_exit</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Defines a helper method for a supplied block, given a name.
+Can be used instead of defining instance variables in the tests.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">let</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>This method needs to be defined on the singleton/eigenclass.</p>
+
+<p>The eigenclass can be accessed as:</p>
+
+<pre><code>eigenclass = class &lt;&lt; self; self; end
+</code></pre>
+
+<p>Since Ruby 1.9 however a singleton_class was introduced
+which provides acess to the singleton of the object.</p>
+
+<p>If one were to use:</p>
+
+<pre><code> self.class.instance_eval do ... end
+ self.class.class_eval do .. end
+ self.class.send :define_method, name do
+</code></pre>
+
+<p>The method would be defined on the class and would
+persist across all the examples.
+For instance:</p>
+
+<pre><code> describe &quot;Some Example&quot; do
+   let(:hundred) { 100 }
+   it &quot;should exist&quot; { hundred.should == 100 }
+ end
+ describe &quot;Some Other Example&quot; do
+   # This example would pass, when it should fail.
+   it &quot;should exist&quot; { hundred.should == 100 }
+ end
+</code></pre>
+
+<p>Since define_method is a private method, we use <code>send</code>
+to access it.</p>
+
+<p>The method defines a variable which uses a Hash
+to store the result of evaluating the <code>block</code> given.</p>
+
+<p>Again notice the supplied <code>block</code> needs to be evaluated
+on the current instance, which is why we are using <code>instance_eval</code></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="n">singleton_class</span><span class="o">.</span><span class="n">send</span> <span class="ss">:define_method</span><span class="p">,</span> <span class="nb">name</span> <span class="k">do</span>
+        <span class="vi">@assignments</span> <span class="o">||=</span> <span class="p">{}</span>
+        <span class="vi">@assignments</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span> <span class="o">=</span> <span class="nb">instance_eval</span> <span class="o">&amp;</span><span class="n">block</span>
+      <span class="k">end</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Used to create a setup before an example or all examples
+are executed.</p>
+
+<p>It defaults to before(:each). Only that is supported at the minute.</p>
+
+<p>When we defined the <code>@before</code> variable we defined it as
+a Hash with a key <code>order</code> and for each key we store an array
+of blocks.
+That means we can also have multiple before blocks for each
+scenario we run if we wanted.</p>
+
+<p>i.e:
+    before(:each) { @person = Person.new }
+    before(:each) { @another_person = Person.new }</p>
+
+<p>Now both of this examples would be executed. See the specs in
+before_spec.rb for more examples.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">before</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="ss">:each</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="vi">@before</span><span class="o">[</span><span class="n">order</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="n">block</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Here i defined the context and aliased the <code>describe</code>
+method so that any <code>describe</code> or <code>context</code> blocks nested
+within context/describe are evaluated under it and
+any <code>before</code> blocks are added and executed.</p>
+
+<p>If we did chose not to re-define/override the methods here
+then the Kernel methods would be called instead and the example
+would &quot;run under&quot; the instance of the parent <code>describe</code> scenario.</p>
+
+<p>In turn we would not be able to access the <code>before</code> blocks defined
+in the parent as they would not exist.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="n">context</span> <span class="o">=</span> <span class="no">Speciny</span><span class="o">::</span><span class="no">MatcherGroup</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>Add all the <code>before</code> blocks to be executed if any where defined
+higher up.</p>
+
+<p>For example consider the following spec:</p>
+
+<pre><code> describe &quot;Before block&quot; do
+   before do
+     @somestring = &quot;somestring&quot;
+   end
+
+   it &quot;should have access to instance variable 
+       in describe before block&quot; do
+
+     @somestring.should == &quot;somestring&quot;
+
+   end
+
+   scenario &quot;Nested scenarios should have access to
+             anything set in parent before block&quot; do
+
+     it &quot;have access to parent variable&quot; do
+       @somestring.should == &quot;somestring&quot;
+     end
+
+   end
+ end
+</code></pre>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="vi">@before</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">order</span><span class="p">,</span> <span class="n">values</span><span class="o">|</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">before_block</span><span class="o">|</span> <span class="n">context</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">before_block</span><span class="p">)</span> <span class="p">}</span>
+      <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>Now call the <code>run!</code> method for the scenario</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="n">context</span><span class="o">.</span><span class="n">run!</span>
+    <span class="k">end</span>
+    <span class="k">alias</span> <span class="ss">:describe</span> <span class="ss">:context</span>
+    <span class="k">alias</span> <span class="ss">:scenario</span> <span class="ss">:context</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>Normal examples</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">it</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>Run the example within a proc and store the result.</p>
+
+<p>Notice that we execute any <code>before(:each)</code> blocks, prior
+to running the example.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="n">returned</span> <span class="o">=</span> <span class="nb">proc</span> <span class="k">do</span>
+        <span class="vi">@before</span><span class="o">[</span><span class="ss">:each</span><span class="o">].</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">b</span><span class="o">|</span> <span class="nb">instance_eval</span> <span class="o">&amp;</span><span class="n">b</span> <span class="p">}</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">call</span>
+      <span class="k">end</span><span class="o">.</span><span class="n">call</span>
+      <span class="vi">@tests</span><span class="o">[</span><span class="n">description</span><span class="o">]</span> <span class="o">=</span> <span class="n">returned</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>Pending examples</p>
+
+<p>Just the simplest way i could do this i the time.</p>
+
+<p>Couldn&#39;t think of a better way. Please contribute if you have one.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">xit</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="vi">@tests</span><span class="o">[</span><span class="n">description</span><span class="o">]</span> <span class="o">=</span> <span class="ss">:pending</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
