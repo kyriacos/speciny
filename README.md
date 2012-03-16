@@ -5,8 +5,10 @@ A tiny RSpec clone.
 NOT a replacement for RSpec, NOR is it trying to be the new
 cool kid on the block.
 
-RSpec is awesome and you should use that. For those tiny projects,
-you may choose to use this.
+RSpec is awesome and you should use that.
+
+For those tiny projects, you may have and want to try something new then do so :).
+
 However there's MiniTest Spec which ships with Ruby 1.9.
 
 As such use this project and learn how Ruby and DSL/Testing Frameworks work.
@@ -16,7 +18,7 @@ https://www.relishapp.com/rspec/rspec-core/v/2-8/docs/hooks/before-and-after-hoo
 
 ### Using
 
-Just clone the repo `require lib/speciny` and you're off.
+Just clone the repo `require 'lib/speciny'` and you're off.
 
 Run your specs using:
 ```
