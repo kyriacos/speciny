@@ -12,16 +12,8 @@ describe "Before block" do
     @somestring.should == "somestring"
   end
 
-  scenario "Variables set in one example not available in other example" do
-    before do
-      @somevar = 12
-    end
-
-    it "sets an instance variable available to example" do
-      @somevar.should == 12
-    end
-
-    it "should have access to parent before variables" do
+  scenario "Nested scenarios should have access to anything set in parent before block" do
+    it "have access to parent variable" do
       @somestring.should == "somestring"
     end
   end
@@ -54,7 +46,8 @@ describe "Before block" do
 end
 
 class Person
-  def name; @name ||= "NoName"; end
+  def initialize(name="NoName"); @name = name; end
+  def name; @name; end
   def name=(value); @name = value; end
 end
 
@@ -76,5 +69,15 @@ describe "before each" do
     it "should not share state with other examples" do
       @person.name.should == "NoName"
     end
+  end
+end
+
+scenario "defining multiple before(:each)" do
+  before(:each) { @person = Person.new("kaks") }
+  before(:each) { @another_person = Person.new }
+
+  it "both should exist" do
+    @person.name.should == "kaks"
+    @another_person.name.should == "NoName"
   end
 end
