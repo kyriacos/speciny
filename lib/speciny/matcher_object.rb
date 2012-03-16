@@ -24,4 +24,17 @@ module Speciny
       @expected.matches?(@actual)
     end
   end
+
+  class PositiveMatcherObject < MatcherObject
+  end
+
+  class NegativeMatcherObject < MatcherObject
+    def ==(other)
+      !super
+    end
+
+    def matches?
+      !super
+    end
+  end
 end
