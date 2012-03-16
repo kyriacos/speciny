@@ -9,7 +9,6 @@ module Speciny
       @before = Hash.new { |order, values| order[values] = Array.new }
     end
 
-    # Got this idea from `bacon` another tiny rspec clone
     # When the instance exits it should print a summary on
     # the screen with the results.
     def summary_at_exit
@@ -156,7 +155,9 @@ module Speciny
     end
 
     # Pending examples
+    #
     # Just the simplest way i could do this i the time.
+    #
     # Couldn't think of a better way. Please contribute if you have one.
     def xit(description, &block)
       @tests[description] = :pending
