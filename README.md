@@ -19,7 +19,7 @@ Some of the ideas for the test specs i got from:
 <https://www.relishapp.com/rspec/rspec-core/v/2-8/docs/hooks/before-and-after-hooks>
 
 ### Documentation
-Check out the (github pages)[http://kyriacos.github.com/speciny].
+Check out the [github pages](http://kyriacos.github.com/speciny).
 
 ### Using
 
