@@ -2,7 +2,9 @@ module Speciny
   module Matchers
 
     def have(value); Have.new(value); end
+    def be(value); Have.new(value); end
     def equal(value); Equal.new(value); end
+
 
     def raise_error(value=nil); Raise.new(value); end
     alias :raises_error :raise_error

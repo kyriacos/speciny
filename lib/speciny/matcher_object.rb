@@ -9,19 +9,22 @@ module Speciny
 
     def ==(other)
       @result = @actual == other
-      #raise Speciny::Error unless @result
+      raise Speciny::MatchError unless @result
+      @result
       #fail_with_message(other, actual) unless @result
     end
 
-    def fail_with_message(expected, actual)
-      puts "-" * 10
-      puts "Expected: #{expected}\nInstead got: #{actual}"
-      puts "-" * 10
-      #raise Speciny::Error
-    end
+    #def fail_with_message(expected, actual)
+      #puts "-" * 10
+      #puts "Expected: #{expected}\nInstead got: #{actual}"
+      #puts "-" * 10
+      ##raise Speciny::MatchError
+    #end
 
     def matches?
-      @expected.matches?(@actual)
+      @result = @expected.matches?(@actual)
+      raise Speciny::MatchError unless @result
+      @result
     end
   end
 
@@ -30,11 +33,18 @@ module Speciny
 
   class NegativeMatcherObject < MatcherObject
     def ==(other)
-      !super
+      #!super
+      @result = !(@actual == other)
+      raise Speciny::MatchError unless @result
+      @result
+      #fail_with_message(other, actual) unless @result
     end
 
     def matches?
-      !super
+      #!super
+      @result = !(@expected.matches?(@actual))
+      raise Speciny::MatchError unless @result
+      @result
     end
   end
 end
