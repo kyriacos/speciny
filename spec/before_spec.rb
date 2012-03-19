@@ -77,7 +77,7 @@ scenario "defining multiple before(:each)" do
   before(:each) { @another_person = Person.new }
 
   it "both should exist" do
-    @person.name.should == "kakaaa"
+    @person.name.should == "kaks"
     @another_person.name.should == "NoName"
   end
 end
