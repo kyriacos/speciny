@@ -1,11 +1,11 @@
 module Kernel
   def should(matcher=nil, &block)
-    Speciny::PositiveMatcherObject.new(self, matcher, &block).run!
+    Speciny::PositiveMatcherHandler.new(self, matcher, &block).run!
   end
   alias :to :should
 
   def should_not(matcher=nil, &block)
-    Speciny::NegativeMatcherObject.new(self, matcher, &block).run!
+    Speciny::NegativeMatcherHandler.new(self, matcher, &block).run!
   end
   alias :to_not :should_not
 end

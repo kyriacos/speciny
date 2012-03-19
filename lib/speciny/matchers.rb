@@ -1,10 +1,15 @@
 module Speciny
   module Matchers
+    #def method_missing(name, *args)
+      #if name.to_s =~ /^be_(.*)/
+        #MatcherObject.new(args[0], $1.to_sym)
+      #else
+        #super
+      #end
+    #end
 
     def have(value); Have.new(value); end
-    def be(value); Have.new(value); end
     def equal(value); Equal.new(value); end
-
 
     def raise_error(value=nil); Raise.new(value); end
     alias :raises_error :raise_error
@@ -25,12 +30,20 @@ module Speciny
       result
     end
 
-    class Have
+    class MatcherObject
       attr_reader :value
-      def initialize(value)
+      def initialize(value, type)
         @value = value
+        @type = type
       end
 
+      def matches?(actual)
+        #actual.send(@type, @value)
+        raise Speciny::NoMatchOperatorImplemented
+      end
+    end
+
+    class Have < MatcherObject
       def items; self; end
       def things; self; end
       def characters; self; end
@@ -45,23 +58,13 @@ module Speciny
       end
     end
 
-    class Equal
-      attr_reader :value
-      def initialize(value)
-        @value = value
-      end
-
-      def matches?(actual)
+    class Equal < MatcherObject
+     def matches?(actual)
         actual.equal?(value)
       end
     end
 
-    class Raise
-      attr_reader :value
-      def initialize(value=nil)
-        @value = value
-      end
-
+    class Raise < MatcherObject
       def matches?(actual)
         if value.kind_of?(String) && actual.respond_to?(:message)
           value == actual.message

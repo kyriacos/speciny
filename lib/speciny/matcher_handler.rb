@@ -1,5 +1,5 @@
 module Speciny
-  class MatcherObject
+  class MatcherHandler
     attr_reader :actual, :matcher, :result
     def initialize(actual, matcher=nil, &block)
       @actual = actual
@@ -35,10 +35,10 @@ module Speciny
 
   end
 
-  class PositiveMatcherObject < MatcherObject
+  class PositiveMatcherHandler < MatcherHandler
   end
 
-  class NegativeMatcherObject < MatcherObject
+  class NegativeMatcherHandler < MatcherHandler
     def handle_result
       @result = !@result
       super
