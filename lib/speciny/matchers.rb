@@ -32,7 +32,7 @@ module Speciny
 
     class MatcherObject
       attr_reader :value
-      def initialize(value, type)
+      def initialize(value, type=nil)
         @value = value
         @type = type
       end
