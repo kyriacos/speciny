@@ -7,13 +7,11 @@ module Speciny
     end
 
     # stupid needs refactoring
-    def normalized_value?(returned)
-      returned.respond_to?(:result) ?  returned.result : returned
-    end
+    #def normalized_value?(returned)
+      #returned.respond_to?(:result) ?  returned.result : returned
+    #end
 
-    def print_test_result(example, returned)
-      result = normalized_value?(returned)
-
+    def print_test_result(example, result)
       puts "SCENARIO: #{@scenario}"
       puts "\t- #{example}"
 
