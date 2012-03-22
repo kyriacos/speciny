@@ -6,11 +6,6 @@ module Speciny
       @passing = @failing = @pending = 0
     end
 
-    # stupid needs refactoring
-    #def normalized_value?(returned)
-      #returned.respond_to?(:result) ?  returned.result : returned
-    #end
-
     def print_test_result(example, result)
       puts "SCENARIO: #{@scenario}"
       puts "\t- #{example}"
